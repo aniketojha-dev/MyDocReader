@@ -59,6 +59,14 @@ export function ChatInterface({ onBack }: ChatInterfaceProps) {
   useEffect(() => {
     (async () => {
       try {
+        const hasSession = sessionStorage.getItem("mdr_session");
+        if (!hasSession) {
+          await clearChunks();
+          vectorStore.clear();
+          sessionStorage.setItem("mdr_session", "1");
+          setIsRestoring(false);
+          return;
+        }
         const meta = await loadSessionMeta();
         if (meta && meta.chunkCount > 0) {
           const chunks = await loadChunks();
