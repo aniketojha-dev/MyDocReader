@@ -1,6 +1,6 @@
 # MyDocReader
 
-AI-powered document intelligence platform. Upload PDF, DOCX, or TXT files and ask questions about your content. Answers are grounded in your documents with automatic citations.
+Upload PDF, DOCX, or TXT files and ask questions about your content. Answers are grounded in your documents with automatic citations.
 
 ---
 
@@ -22,38 +22,25 @@ Retrieval-Augmented Generation (RAG) pipeline running entirely in the browser:
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                         Browser                                    │
-│                                                                     │
-│  ┌──────────┐    ┌──────────┐    ┌───────────┐    ┌────────────┐ │
-│  │ Upload   │───▶│ Extract  │───▶│ Chunk +   │───▶│ IndexedDB  │ │
-│  │ Document │    │ Text     │    │ Embed      │    │ Persist    │ │
-│  └──────────┘    └──────────┘    └─────┬─────┘    └────────────┘ │
-│                                        │                            │
-│  ┌──────────┐    ┌──────────┐          │                            │
-│  │ Chat UI  │◀───│ Answer   │◀─────────┘                            │
-│  │ + Cites  │    │ + Cites  │                                       │
-│  └──────────┘    └────┬─────┘                                       │
-│                       │                                             │
-│            ┌──────────▼──────────────────┐                          │
-│            │  Server API Route            │                          │
-│            │  OpenRouter (free model)     │                          │
-│            │  ─── fallback on 429 ──▶ Groq │                          │
-│            └─────────────────────────────┘                          │
+│                         Browser                                    
+│                                                                     
+│  ┌──────────┐    ┌──────────┐    ┌───────────┐    ┌────────────┐ 
+│  │ Upload   │───▶│ Extract  │───▶│ Chunk +   │───▶│ IndexedDB │
+│  │ Document │    │ Text     │    │ Embed      │    │ Persist    │ 
+│  └──────────┘    └──────────┘    └─────┬─────┘    └────────────┘ 
+│                                        │                            
+│  ┌──────────┐    ┌──────────┐          │                            
+│  │ Chat UI  │◀───│ Answer   │◀─────────┘                            
+│  │ + Cites  │    │ + Cites  │                                       
+│  └──────────┘    └────┬─────┘                                       
+│                       │                                             
+│            ┌──────────▼──────────────────┐                          
+│            │  Server API Route            │                          
+│            │  OpenRouter (free model)     │                          
+│            │  ─── fallback on 429 ──▶ Groq │                          
+│            └─────────────────────────────┘                          
 └──────────────────────────────────────────────────────────────────┘
 ```
-
-### Key Design Decisions
-
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| Embeddings | Transformers.js (local) | Zero API calls, fully private, no vector DB |
-| Vector Store | In-memory + IndexedDB | Survives refresh, cleared on reset |
-| Primary LLM | OpenRouter free models (`:free` suffix) | No cost, model-swappable via UI |
-| Fallback LLM | Groq | Covers rate limits / outages |
-| Persistence | IndexedDB | Page refresh safe, no cloud storage |
-| Hosting | Vercel (serverless) | No server-side database needed |
-
----
 
 ## Technology Used
 
@@ -68,30 +55,6 @@ Retrieval-Augmented Generation (RAG) pipeline running entirely in the browser:
 | **Document Parsing** | pdf.js (PDF), mammoth.js (DOCX), File API (TXT) |
 | **Storage** | IndexedDB (browser) |
 | **Chunking** | Custom semantic chunker with metadata extraction |
-
----
-
-## Quick Start
-
-```bash
-git clone https://github.com/aniketojha-dev/MyDocReader.git
-cd MyDocReader
-npm install
-cp .env.example .env.local
-# Add OPENROUTER_API_KEY and GROQ_API_KEY to .env.local
-npm run dev
-```
-
-## Environment Variables
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `OPENROUTER_API_KEY` | Yes | OpenRouter API key |
-| `GROQ_API_KEY` | No | Groq API key (fallback) |
-
-## Deployment
-
-Deploy on Vercel — set the environment variables in the dashboard, no config changes needed.
 
 ---
 
