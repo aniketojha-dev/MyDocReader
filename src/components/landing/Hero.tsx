@@ -24,8 +24,8 @@ const itemVariants = {
 
 export function Hero({ onGetStarted }: HeroProps) {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-white via-primary-50/30 to-white">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-100/40 via-transparent to-transparent" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#f5f0eb] via-[#f0ece6] to-[#f5f0eb]">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary-200/30 via-transparent to-transparent" />
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-300/10 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-300/10 rounded-full blur-3xl" />
 
@@ -44,7 +44,7 @@ export function Hero({ onGetStarted }: HeroProps) {
 
         <motion.h1
           variants={itemVariants}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 mb-6"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#3d3833] mb-6"
         >
           Your Documents,
           <br />
@@ -55,7 +55,7 @@ export function Hero({ onGetStarted }: HeroProps) {
 
         <motion.p
           variants={itemVariants}
-          className="text-lg sm:text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed"
+          className="text-lg sm:text-xl text-[#6b6560] max-w-2xl mx-auto mb-10 leading-relaxed"
         >
           Upload PDFs, DOCX, or TXT files and ask questions about your content.
           Get precise answers with automatic citations — no more searching through pages.
@@ -94,11 +94,11 @@ export function Hero({ onGetStarted }: HeroProps) {
           ].map((item) => (
             <div
               key={item.label}
-              className="flex flex-col items-center p-4 rounded-2xl bg-white/50 backdrop-blur-sm border border-slate-100"
+              className="flex flex-col items-center p-4 rounded-2xl bg-[#faf7f3]/80 backdrop-blur-sm border border-[#e5ded7]"
             >
               <item.icon className="h-6 w-6 text-primary-500 mb-2" />
-              <span className="text-sm font-semibold text-slate-900">{item.label}</span>
-              <span className="text-xs text-slate-400">{item.desc}</span>
+              <span className="text-sm font-semibold text-[#3d3833]">{item.label}</span>
+              <span className="text-xs text-[#9c9590]">{item.desc}</span>
             </div>
           ))}
         </motion.div>

@@ -21,7 +21,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
       className={cn("flex gap-3", isUser ? "justify-end" : "justify-start")}
     >
       {!isUser && (
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 shadow-md shadow-primary-200">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 shadow-md shadow-primary-200/30">
           <Bot className="h-4 w-4 text-white" />
         </div>
       )}
@@ -31,8 +31,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
           className={cn(
             "rounded-2xl px-4 py-3 text-sm leading-relaxed",
             isUser
-              ? "bg-primary-600 text-white shadow-md shadow-primary-200"
-              : "bg-slate-50 border border-slate-100 text-slate-700"
+              ? "bg-primary-600 text-white shadow-md shadow-primary-200/30"
+              : "bg-[#faf7f3] border border-[#e5ded7] text-[#6b6560]"
           )}
         >
           {message.content}
@@ -40,7 +40,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
         {message.citations && message.citations.length > 0 && (
           <div className="space-y-2 pt-1">
-            <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+            <p className="text-xs font-medium text-[#9c9590] uppercase tracking-wider">
               Sources
             </p>
             {message.citations.map((citation, idx) => (
@@ -51,8 +51,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
       </div>
 
       {isUser && (
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-slate-100 border border-slate-200">
-          <User className="h-4 w-4 text-slate-600" />
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-[#f0ece6] border border-[#e5ded7]">
+          <User className="h-4 w-4 text-[#6b6560]" />
         </div>
       )}
     </motion.div>

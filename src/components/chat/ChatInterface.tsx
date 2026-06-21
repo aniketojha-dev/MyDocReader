@@ -79,7 +79,6 @@ export function ChatInterface({ onBack }: ChatInterfaceProps) {
           }
         }
       } catch {
-        // IndexedDB unavailable or empty — start fresh
       } finally {
         setIsRestoring(false);
       }
@@ -247,18 +246,18 @@ Content: ${sc.chunk.text}`
 
   if (isRestoring) {
     return (
-      <div className="flex h-screen items-center justify-center bg-white">
+      <div className="flex h-screen items-center justify-center bg-[#f5f0eb]">
         <div className="flex flex-col items-center gap-3">
           <Database className="h-8 w-8 text-primary-400 animate-pulse" />
-          <p className="text-sm text-slate-400">Restoring session...</p>
+          <p className="text-sm text-[#6b6560]">Restoring session...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen flex-col bg-white">
-      <header className="flex items-center justify-between border-b border-slate-100 bg-white/80 backdrop-blur-xl px-4 sm:px-6 py-3">
+    <div className="flex h-screen flex-col bg-[#f5f0eb]">
+      <header className="flex items-center justify-between border-b border-[#e5ded7] bg-[#faf7f3]/90 backdrop-blur-xl px-4 sm:px-6 py-3">
         <div className="flex items-center gap-3">
           <Button
             variant="ghost"
@@ -269,12 +268,12 @@ Content: ${sc.chunk.text}`
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 shadow-md shadow-primary-200">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary-500 to-accent-500 shadow-md shadow-primary-200/30">
               <FileText className="h-4 w-4 text-white" />
             </div>
             <div>
-              <h1 className="text-sm font-bold text-slate-900">MyDocReader</h1>
-              <p className="text-xs text-slate-400">
+              <h1 className="text-sm font-bold text-[#3d3833]">MyDocReader</h1>
+              <p className="text-xs text-[#9c9590]">
                 {processedCount > 0
                   ? `${processedCount} doc(s) | ${totalChunks} chunks`
                   : "No documents loaded"}
@@ -286,7 +285,7 @@ Content: ${sc.chunk.text}`
           <div className="relative hidden sm:block">
             <button
               onClick={() => setShowModelPicker(!showModelPicker)}
-              className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors"
+              className="flex items-center gap-1.5 rounded-lg border border-[#e5ded7] bg-[#faf7f3] px-2.5 py-1.5 text-xs font-medium text-[#6b6560] hover:bg-[#f5f0eb] transition-colors"
             >
               {currentModel?.name || "Select Model"}
               <ChevronDown className="h-3 w-3" />
@@ -297,7 +296,7 @@ Content: ${sc.chunk.text}`
                   className="fixed inset-0 z-40"
                   onClick={() => setShowModelPicker(false)}
                 />
-                <div className="absolute right-0 top-full mt-1 z-50 w-64 rounded-xl border border-slate-200 bg-white shadow-lg shadow-slate-200/50 py-1">
+                <div className="absolute right-0 top-full mt-1 z-50 w-64 rounded-xl border border-[#e5ded7] bg-[#faf7f3] shadow-lg shadow-primary-200/20 py-1">
                   {AVAILABLE_MODELS.map((m) => (
                     <button
                       key={m.id}
@@ -306,15 +305,15 @@ Content: ${sc.chunk.text}`
                         setShowModelPicker(false);
                       }}
                       className={cn(
-                        "flex w-full items-center justify-between px-3 py-2 text-left text-xs transition-colors hover:bg-slate-50",
+                        "flex w-full items-center justify-between px-3 py-2 text-left text-xs transition-colors hover:bg-[#f0ece6]",
                         m.id === selectedModel
-                          ? "text-primary-600 bg-primary-50"
-                          : "text-slate-600"
+                          ? "text-primary-700 bg-primary-100"
+                          : "text-[#6b6560]"
                       )}
                     >
                       <div>
                         <p className="font-medium">{m.name}</p>
-                        <p className="text-slate-400">{m.provider}</p>
+                        <p className="text-[#9c9590]">{m.provider}</p>
                       </div>
                       {m.id === selectedModel && (
                         <div className="h-2 w-2 rounded-full bg-primary-500" />
@@ -333,7 +332,7 @@ Content: ${sc.chunk.text}`
             variant="ghost"
             size="icon"
             onClick={handleClear}
-            className="text-slate-400 hover:text-red-500"
+            className="text-[#9c9590] hover:text-[#c4817a]"
             title="Clear all data"
           >
             <Trash2 className="h-4 w-4" />
@@ -341,14 +340,14 @@ Content: ${sc.chunk.text}`
         </div>
       </header>
 
-      <div className="flex border-b border-slate-100 bg-slate-50/50">
+      <div className="flex border-b border-[#e5ded7] bg-[#f0ece6]/50">
         <button
           onClick={() => setActiveTab("upload")}
           className={cn(
             "flex-1 px-4 py-2.5 text-sm font-medium transition-colors relative",
             activeTab === "upload"
-              ? "text-primary-600"
-              : "text-slate-400 hover:text-slate-600"
+              ? "text-primary-700"
+              : "text-[#9c9590] hover:text-[#6b6560]"
           )}
         >
           Documents
@@ -365,8 +364,8 @@ Content: ${sc.chunk.text}`
           className={cn(
             "flex-1 px-4 py-2.5 text-sm font-medium transition-colors relative",
             activeTab === "chat"
-              ? "text-primary-600"
-              : "text-slate-400 hover:text-slate-600",
+              ? "text-primary-700"
+              : "text-[#9c9590] hover:text-[#6b6560]",
             processedCount === 0 && "cursor-not-allowed opacity-50"
           )}
         >
@@ -385,10 +384,10 @@ Content: ${sc.chunk.text}`
           <div className="h-full overflow-y-auto p-4 sm:p-6">
             <div className="mx-auto max-w-lg space-y-6">
               <div className="text-center">
-                <h2 className="text-lg font-semibold text-slate-900">
+                <h2 className="text-lg font-semibold text-[#3d3833]">
                   Upload Documents
                 </h2>
-                <p className="text-sm text-slate-400 mt-1">
+                <p className="text-sm text-[#9c9590] mt-1">
                   Your files stay in your browser. Data persists across refreshes.
                 </p>
               </div>
@@ -410,13 +409,13 @@ Content: ${sc.chunk.text}`
                       animate={{ opacity: 1 }}
                       className="flex flex-col items-center justify-center py-20 text-center"
                     >
-                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-50 to-accent-50 mb-4">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-100 to-accent-100 mb-4">
                         <Sparkles className="h-8 w-8 text-primary-500" />
                       </div>
-                      <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                      <h3 className="text-lg font-semibold text-[#3d3833] mb-2">
                         Ready to Ask Questions
                       </h3>
-                      <p className="text-sm text-slate-400 max-w-sm">
+                      <p className="text-sm text-[#9c9590] max-w-sm">
                         Ask anything about your uploaded documents. Get precise
                         answers with citations and confidence scores.
                       </p>
@@ -432,7 +431,7 @@ Content: ${sc.chunk.text}`
                     animate={{ opacity: 1 }}
                     className="flex items-center gap-3"
                   >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 shadow-md shadow-primary-200">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 shadow-md shadow-primary-200/30">
                       <Bot className="h-4 w-4 text-white" />
                     </div>
                     <div className="flex gap-1.5">
@@ -454,7 +453,7 @@ Content: ${sc.chunk.text}`
               </div>
             </ScrollArea>
 
-            <div className="border-t border-slate-100 bg-white p-4 sm:p-6">
+            <div className="border-t border-[#e5ded7] bg-[#faf7f3] p-4 sm:p-6">
               <div className="mx-auto flex max-w-3xl gap-3">
                 <Input
                   value={input}
@@ -489,8 +488,8 @@ Content: ${sc.chunk.text}`
         )}
       </div>
 
-      <footer className="border-t border-slate-100 bg-white py-2 px-4 text-center">
-        <div className="flex items-center justify-center gap-4 text-xs text-slate-400">
+      <footer className="border-t border-[#e5ded7] bg-[#faf7f3] py-2 px-4 text-center">
+        <div className="flex items-center justify-center gap-4 text-xs text-[#9c9590]">
           <span>Model: {currentModel?.name || DEFAULT_MODEL}</span>
           <span>&middot;</span>
           <span>IndexedDB</span>

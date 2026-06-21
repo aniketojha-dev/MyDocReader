@@ -17,48 +17,48 @@ const features = [
     title: "Smart Document Parsing",
     description:
       "Extract text from PDF, DOCX, and TXT files with high accuracy. Preserve document structure, headings, and page numbers.",
-    gradient: "from-blue-500 to-cyan-500",
+    gradient: "from-primary-500 to-primary-400",
   },
   {
     icon: Brain,
     title: "Semantic Understanding",
     description:
       "Advanced AI embeddings understand the meaning behind your documents, not just keywords. Find relevant content with precision.",
-    gradient: "from-violet-500 to-purple-500",
+    gradient: "from-accent-500 to-accent-400",
   },
   {
     icon: MessageSquare,
     title: "Intelligent Q&A",
     description:
       "Ask questions in natural language and get precise answers extracted from your documents. Every answer includes source citations.",
-    gradient: "from-emerald-500 to-teal-500",
+    gradient: "from-primary-600 to-accent-500",
   },
   {
     icon: Lock,
     title: "Complete Privacy",
     description:
       "Your documents never leave your browser. All processing, storage, and search happens in-memory. No cloud, no servers, no tracking.",
-    gradient: "from-rose-500 to-pink-500",
+    gradient: "from-primary-400 to-primary-300",
   },
   {
     icon: BookOpen,
     title: "Automatic Citations",
     description:
       "Every answer includes file name, section, page number, and paragraph reference. Verify sources instantly.",
-    gradient: "from-amber-500 to-orange-500",
+    gradient: "from-accent-400 to-accent-300",
   },
   {
     icon: ArrowUpDown,
     title: "Lightning Fast Search",
     description:
       "Vector similarity search retrieves the most relevant document sections in milliseconds for instant responses.",
-    gradient: "from-indigo-500 to-blue-500",
+    gradient: "from-primary-500 to-accent-500",
   },
 ];
 
 export function Features() {
   return (
-    <section id="features" className="py-24 bg-white">
+    <section id="features" className="py-24 bg-[#f5f0eb]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -67,10 +67,10 @@ export function Features() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#3d3833] mb-4">
             Everything You Need
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-lg text-[#6b6560] max-w-2xl mx-auto">
             Powerful features designed to make document analysis effortless and insightful.
           </p>
         </motion.div>
@@ -84,17 +84,17 @@ export function Features() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Card className="group h-full hover:shadow-lg hover:shadow-slate-200/50 hover:border-slate-200 transition-all duration-300">
+              <Card className="group h-full bg-[#faf7f3] border-[#e5ded7] hover:shadow-lg hover:shadow-primary-200/20 hover:border-primary-300 transition-all duration-300">
                 <CardContent className="p-6">
                   <div
-                    className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} shadow-lg`}
+                    className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} shadow-lg shadow-primary-200/20`}
                   >
                     <feature.icon className="h-6 w-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                  <h3 className="text-lg font-semibold text-[#3d3833] mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-slate-500 leading-relaxed">
+                  <p className="text-sm text-[#6b6560] leading-relaxed">
                     {feature.description}
                   </p>
                 </CardContent>

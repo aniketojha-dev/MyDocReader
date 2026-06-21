@@ -69,16 +69,16 @@ export function DocumentUpload({ onUpload, isProcessing, uploadedFiles }: Docume
         initial={false}
         animate={{
           borderColor: dragActive
-            ? "rgb(59, 130, 246)"
+            ? "rgb(106, 122, 144)"
             : error
-            ? "rgb(239, 68, 68)"
-            : "rgb(226, 232, 240)",
+            ? "rgb(196, 129, 122)"
+            : "rgb(229, 222, 215)",
         }}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
         onDrop={handleDrop}
-        className="relative rounded-2xl border-2 border-dashed bg-slate-50/50 p-8 transition-all"
+        className="relative rounded-2xl border-2 border-dashed bg-[#f0ece6]/50 p-8 transition-all"
       >
         <input
           type="file"
@@ -88,14 +88,14 @@ export function DocumentUpload({ onUpload, isProcessing, uploadedFiles }: Docume
           disabled={isProcessing}
         />
         <div className="flex flex-col items-center gap-3 pointer-events-none">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-50">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-100">
             <Upload className="h-6 w-6 text-primary-500" />
           </div>
           <div className="text-center">
-            <p className="text-sm font-medium text-slate-700">
+            <p className="text-sm font-medium text-[#3d3833]">
               {dragActive ? "Drop your file here" : "Drag & drop your document"}
             </p>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-[#9c9590] mt-1">
               or click to browse &bull; PDF, DOCX, TXT (max 50MB)
             </p>
           </div>
@@ -108,7 +108,7 @@ export function DocumentUpload({ onUpload, isProcessing, uploadedFiles }: Docume
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="flex items-center gap-2 text-sm text-red-600 bg-red-50 rounded-xl px-4 py-3"
+            className="flex items-center gap-2 text-sm text-[#c4817a] bg-[#f5e6e4] rounded-xl px-4 py-3"
           >
             <AlertCircle className="h-4 w-4 flex-shrink-0" />
             <span>{error}</span>
@@ -120,7 +120,7 @@ export function DocumentUpload({ onUpload, isProcessing, uploadedFiles }: Docume
       </AnimatePresence>
 
       {isProcessing && (
-        <div className="flex items-center gap-3 rounded-xl bg-primary-50 px-4 py-3">
+        <div className="flex items-center gap-3 rounded-xl bg-primary-100 px-4 py-3">
           <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
           <span className="text-sm text-primary-700">Processing document...</span>
         </div>
@@ -128,18 +128,18 @@ export function DocumentUpload({ onUpload, isProcessing, uploadedFiles }: Docume
 
       {uploadedFiles.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">
+          <p className="text-xs font-medium text-[#9c9590] uppercase tracking-wider">
             Uploaded Documents
           </p>
           {uploadedFiles.map((name) => (
             <div
               key={name}
-              className="flex items-center gap-3 rounded-xl bg-emerald-50 border border-emerald-100 px-4 py-3"
+              className="flex items-center gap-3 rounded-xl bg-[#e8f0e6] border border-[#d1e0ce] px-4 py-3"
             >
-              <CheckCircle2 className="h-4 w-4 text-emerald-500 flex-shrink-0" />
+              <CheckCircle2 className="h-4 w-4 text-[#7a9c76] flex-shrink-0" />
               <div className="flex items-center gap-2 min-w-0">
-                <FileText className="h-4 w-4 text-emerald-500 flex-shrink-0" />
-                <span className="text-sm text-emerald-700 truncate">{name}</span>
+                <FileText className="h-4 w-4 text-[#7a9c76] flex-shrink-0" />
+                <span className="text-sm text-[#5a7a56] truncate">{name}</span>
               </div>
               <Badge variant="success" className="ml-auto flex-shrink-0">
                 Ready

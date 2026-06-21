@@ -9,19 +9,19 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary-600 text-white shadow-lg shadow-primary-200 hover:bg-primary-700 hover:shadow-xl hover:shadow-primary-200 active:scale-[0.98]",
+          "bg-primary-600 text-white shadow-lg shadow-primary-200/30 hover:bg-primary-700 hover:shadow-xl hover:shadow-primary-200/30 active:scale-[0.98]",
         destructive:
-          "bg-red-500 text-white shadow-lg shadow-red-200 hover:bg-red-600",
+          "bg-[#c4817a] text-white shadow-lg shadow-[#c4817a]/20 hover:bg-[#b06d67]",
         outline:
-          "border-2 border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300",
+          "border-2 border-[#e5ded7] bg-[#faf7f3] text-[#6b6560] hover:bg-[#f5f0eb] hover:border-[#c8d0da]",
         secondary:
-          "bg-slate-100 text-slate-900 hover:bg-slate-200",
+          "bg-[#e2e6ec] text-[#3d3833] hover:bg-[#c8d0da]",
         ghost:
-          "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
+          "text-[#6b6560] hover:bg-[#f0ece6] hover:text-[#3d3833]",
         link:
           "text-primary-600 underline-offset-4 hover:underline",
         gradient:
-          "bg-gradient-to-r from-primary-600 to-accent-500 text-white shadow-lg shadow-primary-200 hover:shadow-xl hover:shadow-primary-200 active:scale-[0.98]",
+          "bg-gradient-to-r from-primary-600 to-accent-500 text-white shadow-lg shadow-primary-200/30 hover:shadow-xl hover:shadow-primary-200/30 active:scale-[0.98]",
       },
       size: {
         default: "h-11 px-5 py-2",

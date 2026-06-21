@@ -10,9 +10,9 @@ interface CitationCardProps {
 }
 
 function getConfidenceColor(confidence: number): string {
-  if (confidence >= 90) return "text-emerald-600 bg-emerald-50 border-emerald-200";
-  if (confidence >= 75) return "text-amber-600 bg-amber-50 border-amber-200";
-  return "text-slate-600 bg-slate-50 border-slate-200";
+  if (confidence >= 90) return "text-[#7a9c76] bg-[#e8f0e6] border-[#d1e0ce]";
+  if (confidence >= 75) return "text-[#b88152] bg-[#faf5f0] border-[#e7ceb9]";
+  return "text-[#6b6560] bg-[#f0ece6] border-[#e5ded7]";
 }
 
 function getConfidenceLabel(confidence: number): string {
@@ -27,10 +27,10 @@ export function CitationCard({ citation, index }: CitationCardProps) {
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay: index * 0.05 }}
-      className="rounded-xl bg-white border border-slate-200 p-4 shadow-sm space-y-3"
+      className="rounded-xl bg-[#faf7f3] border border-[#e5ded7] p-4 shadow-sm space-y-3"
     >
       <div className="flex items-center justify-between">
-        <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest">
+        <span className="text-[11px] font-semibold text-[#9c9590] uppercase tracking-widest">
           Source #{index + 1}
         </span>
         <div
@@ -45,12 +45,12 @@ export function CitationCard({ citation, index }: CitationCardProps) {
 
       <div className="space-y-1.5">
         <div className="flex items-start gap-2.5">
-          <FileText className="h-3.5 w-3.5 text-slate-400 mt-0.5 flex-shrink-0" />
+          <FileText className="h-3.5 w-3.5 text-[#9c9590] mt-0.5 flex-shrink-0" />
           <div className="min-w-0">
-            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wide">
+            <span className="text-[11px] font-medium text-[#9c9590] uppercase tracking-wide">
               File
             </span>
-            <p className="text-sm font-medium text-slate-700 break-all leading-snug">
+            <p className="text-sm font-medium text-[#3d3833] break-all leading-snug">
               {citation.fileName}
             </p>
           </div>
@@ -58,12 +58,12 @@ export function CitationCard({ citation, index }: CitationCardProps) {
 
         {citation.section && (
           <div className="flex items-start gap-2.5">
-            <BookOpen className="h-3.5 w-3.5 text-slate-400 mt-0.5 flex-shrink-0" />
+            <BookOpen className="h-3.5 w-3.5 text-[#9c9590] mt-0.5 flex-shrink-0" />
             <div className="min-w-0">
-              <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wide">
+              <span className="text-[11px] font-medium text-[#9c9590] uppercase tracking-wide">
                 Section
               </span>
-              <p className="text-sm text-slate-600 leading-snug">
+              <p className="text-sm text-[#6b6560] leading-snug">
                 {citation.section}
               </p>
             </div>
@@ -71,24 +71,24 @@ export function CitationCard({ citation, index }: CitationCardProps) {
         )}
 
         <div className="flex items-start gap-2.5">
-          <Hash className="h-3.5 w-3.5 text-slate-400 mt-0.5 flex-shrink-0" />
+          <Hash className="h-3.5 w-3.5 text-[#9c9590] mt-0.5 flex-shrink-0" />
           <div className="min-w-0">
-            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wide">
+            <span className="text-[11px] font-medium text-[#9c9590] uppercase tracking-wide">
               Page
             </span>
-            <p className="text-sm text-slate-600 leading-snug">
+            <p className="text-sm text-[#6b6560] leading-snug">
               {citation.pageNumber}
             </p>
           </div>
         </div>
 
         <div className="flex items-start gap-2.5">
-          <List className="h-3.5 w-3.5 text-slate-400 mt-0.5 flex-shrink-0" />
+          <List className="h-3.5 w-3.5 text-[#9c9590] mt-0.5 flex-shrink-0" />
           <div className="min-w-0">
-            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wide">
+            <span className="text-[11px] font-medium text-[#9c9590] uppercase tracking-wide">
               Paragraph
             </span>
-            <p className="text-sm text-slate-600 leading-snug">
+            <p className="text-sm text-[#6b6560] leading-snug">
               {citation.paragraphIndex}
             </p>
           </div>

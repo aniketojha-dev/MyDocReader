@@ -6,16 +6,16 @@
 
 @layer base {
   * {
-    @apply border-slate-100;
+    @apply border-[#e5ded7];
   }
 
   body {
-    @apply bg-white text-slate-900 antialiased;
+    @apply bg-[#f5f0eb] text-[#6b6560] antialiased;
     font-family: 'Inter', system-ui, sans-serif;
   }
 
   ::selection {
-    @apply bg-primary-100 text-primary-900;
+    @apply bg-[#e2e6ec] text-[#3d3833];
   }
 }
 

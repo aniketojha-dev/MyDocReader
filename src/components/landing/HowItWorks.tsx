@@ -36,7 +36,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="py-24 bg-slate-50/50">
+    <section className="py-24 bg-[#f0ece6]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -45,10 +45,10 @@ export function HowItWorks() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#3d3833] mb-4">
             How It Works
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-lg text-[#6b6560] max-w-2xl mx-auto">
             Get started in minutes with this simple workflow.
           </p>
         </motion.div>
@@ -65,22 +65,22 @@ export function HowItWorks() {
             >
               <div className="flex flex-col items-center text-center">
                 <div className="relative mb-6">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white border border-slate-100 shadow-sm">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#faf7f3] border border-[#e5ded7] shadow-sm">
                     <step.icon className="h-7 w-7 text-primary-600" />
                   </div>
-                  <div className="absolute -top-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-accent-500 text-white text-xs font-bold shadow-lg">
+                  <div className="absolute -top-2 -right-2 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-accent-500 text-white text-xs font-bold shadow-lg shadow-primary-200/30">
                     {step.number}
                   </div>
                 </div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                <h3 className="text-lg font-semibold text-[#3d3833] mb-2">
                   {step.title}
                 </h3>
-                <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
+                <p className="text-sm text-[#6b6560] leading-relaxed max-w-xs">
                   {step.description}
                 </p>
               </div>
               {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-8 left-[60%] w-[calc(80%)] h-px bg-gradient-to-r from-primary-200 to-transparent" />
+                <div className="hidden lg:block absolute top-8 left-[60%] w-[calc(80%)] h-px bg-gradient-to-r from-primary-300/50 to-transparent" />
               )}
             </motion.div>
           ))}
