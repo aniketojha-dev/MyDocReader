@@ -95,10 +95,4 @@ Deploy on Vercel — set the environment variables in the dashboard, no config c
 
 ---
 
-## License
-
-MIT — see [LICENSE](./LICENSE).
-
----
-
 <p align="center">Built By Aniket Ojha</p>
