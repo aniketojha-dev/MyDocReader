@@ -57,7 +57,9 @@ Retrieval-Augmented Generation (RAG) pipeline running entirely in the browser:
 | **Chunking** | Custom semantic chunker with metadata extraction |
 
 ---
+
 Live Link Here : https://my-doc-reader-beige.vercel.app/
+
 ---
 
 <p align="center">Built By Aniket Ojha</p>
