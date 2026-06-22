@@ -3,11 +3,11 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "MyDocReader - AI-Powered Document Intelligence",
+    title: "MyDocReader - Document Intelligence",
   description:
     "Upload PDF, DOCX, and TXT documents and ask questions about your content using AI-powered RAG technology. Get precise answers with automatic citations.",
   openGraph: {
-    title: "MyDocReader - AI-Powered Document Intelligence",
+  title: "MyDocReader - Document Intelligence",
     description:
       "Upload documents and ask questions about your content using AI.",
     type: "website",

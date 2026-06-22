@@ -19,6 +19,7 @@ export interface Citation {
   pageNumber: number;
   paragraphIndex: number;
   confidence: number;
+  excerpt?: string;
 }
 
 export interface ChatMessage {

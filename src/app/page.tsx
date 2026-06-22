@@ -87,7 +87,7 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="text-center mb-16"
           >
-            <h1 className="text-6xl sm:text-7xl md:text-8xl font-bold tracking-[0.15em] text-[#3d3833]">
+            <h1 className="text-6xl sm:text-7xl md:text-8xl font-bold text-[#3d3833]">
               WELCOME
             </h1>
             <p className="mt-4 text-base sm:text-lg text-[#6b6560] font-medium">
@@ -150,7 +150,7 @@ export default function Home() {
       >
         <div className="mx-auto max-w-6xl px-4">
           <div className="flex items-center justify-center gap-4 text-sm text-[#9c9590]">
-            <span>🔒 AI-Powered</span>
+            <span>🔒 Private</span>
             <span className="text-[#e5ded7]">&bull;</span>
             <span>🛡 Secure</span>
             <span className="text-[#e5ded7]">&bull;</span>

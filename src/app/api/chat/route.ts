@@ -162,10 +162,10 @@ function parseCitations(
     let pageNumber = 1;
     let paragraphIndex = 1;
 
-    const fileMatch = block.match(/File:\s*(.+)/i);
+    const fileMatch = block.match(/File:\s*([^\n,]+)/i);
     if (fileMatch) fileName = fileMatch[1].trim();
 
-    const sectionMatch = block.match(/(?:Section|Topic):\s*(.+)/i);
+    const sectionMatch = block.match(/(?:Section|Topic):\s*([^\n,]+)/i);
     if (sectionMatch) section = sectionMatch[1].trim();
 
     const pageMatch = block.match(/Page:\s*(\d+)/i);
@@ -226,21 +226,38 @@ export async function POST(request: NextRequest) {
       .map((m) => `${m.role === "user" ? "User" : "Assistant"}: ${m.content}`)
       .join("\n");
 
-    const systemPrompt = `You are a precise document analysis assistant. You MUST answer questions STRICTLY based ONLY on the provided document context below.
+    const systemPrompt = `You are a precise document analysis assistant. Answer STRICTLY based ONLY on the provided context below.
 
-ABSOLUTE RULES:
+RULES:
 - ONLY use information from the provided context. NEVER use your own knowledge.
-- If the context does not contain the answer, respond with EXACTLY: "Information not found in uploaded documents."
-- Do NOT make up, infer, or guess any information not explicitly stated in the context.
-- Do NOT add explanations or apologies when information is not found.
-- Include EXACT citations for every piece of information you use.
+- If the context does not contain the answer, respond with: "Information not found in uploaded documents."
+- Do NOT make up, infer, or guess. Do NOT add explanations when information is not found.
+- Synthesize and summarize in your own words. Do NOT copy large blocks of text.
+- Use [1], [2], [3] numbers in your answer to reference the corresponding Reference from the context.
 
-CITATION FORMAT (append after your answer, one per source):
+ANSWER STRUCTURE (follow this template exactly):
+## Answer
+Direct answer to the question (1-2 sentences).
+
+## Reason
+Brief explanation with supporting details. Use [1], [2] citations.
+
+## Key Points
+• Point 1
+• Point 2
+• Point 3
+
+## Conclusion
+Final verdict or summary.
+
+After your answer, add a blank line, then list sources like this (strict format, one field per line):
 Source:
-File: [exact file name]
-Section: [section name]
-Page: [page number]
-Paragraph: [paragraph number]`;
+File: Government of State of RP GRAND.pdf
+Section: General
+Page: 3
+Paragraph: 31
+
+Each source must have its own line for each field. Do NOT combine fields on one line.`;
 
     const userPrompt = `Context:
 ${context}
@@ -250,7 +267,7 @@ ${historyContext}
 
 Question: ${question}
 
-Answer strictly from the context above. If the answer is not in the context, say "Information not found in uploaded documents." Include source citations for every fact you use.`;
+Follow the answer structure template exactly. Use [1], [2] etc. to cite references in your answer. Append source list at the end with one field per line.`;
 
     let responseText: string;
     let usedFallback = false;

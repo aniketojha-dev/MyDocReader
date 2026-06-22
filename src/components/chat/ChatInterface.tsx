@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send,
@@ -17,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { ChatMessage as ChatMessageComponent } from "./ChatMessage";
+import { SourcesPanel } from "./SourcesPanel";
 import { DocumentUpload } from "./DocumentUpload";
 import { ChatMessage, UploadedDocument, RAGResponse } from "@/types";
 import { DocumentProcessor } from "@/lib/documentProcessor";
@@ -48,7 +50,9 @@ export function ChatInterface({ onBack }: ChatInterfaceProps) {
   const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL);
   const [showModelPicker, setShowModelPicker] = useState(false);
   const [isRestoring, setIsRestoring] = useState(true);
+  const [modelDropdownStyle, setModelDropdownStyle] = useState<React.CSSProperties | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const modelButtonRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -174,7 +178,7 @@ export function ChatInterface({ onBack }: ChatInterfaceProps) {
       const context = scoredChunks
         .map(
           (sc, i) =>
-            `[Chunk ${i + 1}]
+            `Reference ${i + 1}
 File: ${sc.chunk.metadata.fileName}
 Section: ${sc.chunk.metadata.section}
 Page: ${sc.chunk.metadata.pageNumber}
@@ -201,7 +205,7 @@ Content: ${sc.chunk.text}`
 
       const data: RAGResponse = await response.json();
 
-      const citations = (data.citations || []).map((c) => {
+      const citations = (data.citations || []).slice(0, 3).map((c) => {
         const matched = scoredChunks.find(
           (sc) =>
             sc.chunk.metadata.fileName === c.fileName &&
@@ -250,7 +254,8 @@ Content: ${sc.chunk.text}`
 
   const currentModel = AVAILABLE_MODELS.find((m) => m.id === selectedModel);
   const processedCount = documents.filter((d) => d.processed).length;
-  const totalChunks = documents.reduce((acc, d) => acc + d.chunks.length, 0);
+  const lastAssistantMessage = [...messages].reverse().find((m) => m.role === "assistant");
+  const latestCitations = lastAssistantMessage?.citations || [];
 
   if (isRestoring) {
     return (
@@ -283,54 +288,31 @@ Content: ${sc.chunk.text}`
               <h1 className="text-sm font-bold text-[#3d3833]">MyDocReader</h1>
               <p className="text-xs text-[#9c9590]">
                 {processedCount > 0
-                  ? `${processedCount} doc(s) | ${totalChunks} chunks`
+                  ? `${processedCount} document(s) loaded`
                   : "No documents loaded"}
               </p>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className="relative hidden sm:block">
+          <div ref={modelButtonRef} className="hidden sm:block">
             <button
-              onClick={() => setShowModelPicker(!showModelPicker)}
+              onClick={() => {
+                if (!showModelPicker && modelButtonRef.current) {
+                  const rect = modelButtonRef.current.getBoundingClientRect();
+                  setModelDropdownStyle({
+                    position: "fixed",
+                    top: rect.bottom + 4,
+                    right: window.innerWidth - rect.right,
+                  });
+                }
+                setShowModelPicker((prev) => !prev);
+              }}
               className="flex items-center gap-1.5 rounded-lg border border-[#e5ded7] bg-[#faf7f3] px-2.5 py-1.5 text-xs font-medium text-[#6b6560] hover:bg-[#f5f0eb] transition-colors"
             >
               {currentModel?.name || "Select Model"}
               <ChevronDown className="h-3 w-3" />
             </button>
-            {showModelPicker && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setShowModelPicker(false)}
-                />
-                <div className="absolute right-0 top-full mt-1 z-50 w-64 rounded-xl border border-[#e5ded7] bg-[#faf7f3] shadow-lg shadow-primary-200/20 py-1">
-                  {AVAILABLE_MODELS.map((m) => (
-                    <button
-                      key={m.id}
-                      onClick={() => {
-                        setSelectedModel(m.id);
-                        setShowModelPicker(false);
-                      }}
-                      className={cn(
-                        "flex w-full items-center justify-between px-3 py-2 text-left text-xs transition-colors hover:bg-[#f0ece6]",
-                        m.id === selectedModel
-                          ? "text-primary-700 bg-primary-100"
-                          : "text-[#6b6560]"
-                      )}
-                    >
-                      <div>
-                        <p className="font-medium">{m.name}</p>
-                        <p className="text-[#9c9590]">{m.provider}</p>
-                      </div>
-                      {m.id === selectedModel && (
-                        <div className="h-2 w-2 rounded-full bg-primary-500" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
           </div>
           <Badge variant="secondary" className="hidden sm:flex">
             <Sparkles className="h-3 w-3 mr-1" />
@@ -407,91 +389,109 @@ Content: ${sc.chunk.text}`
             </div>
           </div>
         ) : (
-          <div className="flex h-full flex-col">
-            <ScrollArea ref={scrollRef} className="flex-1 px-4 sm:px-6 py-4">
-              <div className="mx-auto max-w-3xl space-y-4">
-                <AnimatePresence mode="popLayout">
-                  {messages.length === 0 && (
+          <div className="flex h-full">
+            {/* Left Column: Messages + Input */}
+            <div className="flex flex-1 flex-col min-w-0 lg:max-w-[75%]">
+              <ScrollArea ref={scrollRef} className="flex-1 px-4 sm:px-6 py-4">
+                <div className="mx-auto max-w-3xl space-y-4 pb-8">
+                  <AnimatePresence mode="popLayout">
+                    {messages.length === 0 && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="flex flex-col items-center justify-center py-20 text-center"
+                      >
+                        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-100 to-accent-100 mb-4">
+                          <Sparkles className="h-8 w-8 text-primary-500" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-[#3d3833] mb-2">
+                          Ready to Ask Questions
+                        </h3>
+                        <p className="text-sm text-[#9c9590] max-w-sm">
+                          Ask anything about your uploaded documents. Get precise
+                          answers with citations and confidence scores.
+                        </p>
+                      </motion.div>
+                    )}
+                    {messages.map((message) => (
+                      <ChatMessageComponent key={message.id} message={message} />
+                    ))}
+                  </AnimatePresence>
+
+                  {isAnswering && (
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="flex flex-col items-center justify-center py-20 text-center"
+                      className="flex items-center gap-3"
                     >
-                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-100 to-accent-100 mb-4">
-                        <Sparkles className="h-8 w-8 text-primary-500" />
+                      <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 shadow-md shadow-primary-200/30">
+                        <Bot className="h-4 w-4 text-white" />
                       </div>
-                      <h3 className="text-lg font-semibold text-[#3d3833] mb-2">
-                        Ready to Ask Questions
-                      </h3>
-                      <p className="text-sm text-[#9c9590] max-w-sm">
-                        Ask anything about your uploaded documents. Get precise
-                        answers with citations and confidence scores.
-                      </p>
+                      <div className="flex gap-1.5">
+                        <span
+                          className="h-2 w-2 animate-bounce rounded-full bg-primary-400"
+                          style={{ animationDelay: "0ms" }}
+                        />
+                        <span
+                          className="h-2 w-2 animate-bounce rounded-full bg-primary-500"
+                          style={{ animationDelay: "150ms" }}
+                        />
+                        <span
+                          className="h-2 w-2 animate-bounce rounded-full bg-primary-600"
+                          style={{ animationDelay: "300ms" }}
+                        />
+                      </div>
                     </motion.div>
                   )}
-                  {messages.map((message) => (
-                    <ChatMessageComponent key={message.id} message={message} />
-                  ))}
-                </AnimatePresence>
-                {isAnswering && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="flex items-center gap-3"
-                  >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 shadow-md shadow-primary-200/30">
-                      <Bot className="h-4 w-4 text-white" />
-                    </div>
-                    <div className="flex gap-1.5">
-                      <span
-                        className="h-2 w-2 animate-bounce rounded-full bg-primary-400"
-                        style={{ animationDelay: "0ms" }}
-                      />
-                      <span
-                        className="h-2 w-2 animate-bounce rounded-full bg-primary-500"
-                        style={{ animationDelay: "150ms" }}
-                      />
-                      <span
-                        className="h-2 w-2 animate-bounce rounded-full bg-primary-600"
-                        style={{ animationDelay: "300ms" }}
-                      />
-                    </div>
-                  </motion.div>
-                )}
-              </div>
-            </ScrollArea>
 
-            <div className="border-t border-[#e5ded7] bg-[#faf7f3] p-4 sm:p-6">
-              <div className="mx-auto flex max-w-3xl gap-3">
-                <Input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSend();
+                  {/* Mobile Sources Panel (inline after messages) */}
+                  {latestCitations.length > 0 && (
+                    <div className="lg:hidden border-t border-[#e5ded7] pt-4 mt-6">
+                      <SourcesPanel citations={latestCitations} />
+                    </div>
+                  )}
+                </div>
+              </ScrollArea>
+
+              <div className="border-t border-[#e5ded7] bg-[#faf7f3] p-4 sm:p-6">
+                <div className="mx-auto flex max-w-3xl gap-3">
+                  <Input
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSend();
+                      }
+                    }}
+                    placeholder={
+                      processedCount > 0
+                        ? "Ask a question about your document..."
+                        : "Upload a document to start asking questions..."
                     }
-                  }}
-                  placeholder={
-                    processedCount > 0
-                      ? "Ask a question about your document..."
-                      : "Upload a document to start asking questions..."
-                  }
-                  disabled={isAnswering || processedCount === 0}
-                  className="flex-1"
-                />
-                <Button
-                  onClick={handleSend}
-                  disabled={
-                    !input.trim() || isAnswering || processedCount === 0
-                  }
-                  size="icon"
-                  className="shrink-0"
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
+                    disabled={isAnswering || processedCount === 0}
+                    className="flex-1"
+                  />
+                  <Button
+                    onClick={handleSend}
+                    disabled={
+                      !input.trim() || isAnswering || processedCount === 0
+                    }
+                    size="icon"
+                    className="shrink-0"
+                  >
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </div>
+
+            {/* Right Column: Sources Panel (desktop) */}
+            <aside className="hidden lg:flex flex-1 flex-col border-l border-[#e5ded7] bg-[#faf7f3]/50">
+              <div className="flex-1 overflow-y-auto">
+                <SourcesPanel citations={latestCitations} />
+              </div>
+            </aside>
           </div>
         )}
       </div>
@@ -500,11 +500,49 @@ Content: ${sc.chunk.text}`
         <div className="flex items-center justify-center gap-4 text-xs text-[#9c9590]">
           <span>Model: {currentModel?.name || DEFAULT_MODEL}</span>
           <span>&middot;</span>
-          <span>IndexedDB</span>
-          <span>&middot;</span>
           <span>Build By Aniket Ojha</span>
         </div>
       </footer>
+
+      {showModelPicker &&
+        modelDropdownStyle &&
+        createPortal(
+          <>
+            <div
+              className="fixed inset-0 z-[9998]"
+              onClick={() => setShowModelPicker(false)}
+            />
+            <div
+              style={modelDropdownStyle}
+              className="z-[9999] w-64 rounded-xl border border-[#e5ded7] bg-[#faf7f3] shadow-xl shadow-primary-200/20 py-1"
+            >
+              {AVAILABLE_MODELS.map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => {
+                    setSelectedModel(m.id);
+                    setShowModelPicker(false);
+                  }}
+                  className={cn(
+                    "flex w-full items-center justify-between px-3 py-2 text-left text-xs transition-colors hover:bg-[#f0ece6]",
+                    m.id === selectedModel
+                      ? "text-primary-700 bg-primary-100"
+                      : "text-[#6b6560]"
+                  )}
+                >
+                  <div>
+                    <p className="font-medium">{m.name}</p>
+                    <p className="text-[#9c9590]">{m.provider}</p>
+                  </div>
+                  {m.id === selectedModel && (
+                    <div className="h-2 w-2 rounded-full bg-primary-500" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </>,
+          document.body
+        )}
     </div>
   );
 }
