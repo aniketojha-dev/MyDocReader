@@ -24,7 +24,7 @@ import { ChatMessage, UploadedDocument, RAGResponse } from "@/types";
 import { DocumentProcessor } from "@/lib/documentProcessor";
 import { SemanticChunker } from "@/lib/chunker";
 import { vectorStore } from "@/lib/vectorStore";
-import { generateEmbedding } from "@/lib/embeddings";
+import { generateEmbedding, preloadModel } from "@/lib/embeddings";
 import { generateId, cn } from "@/lib/utils";
 import { DEFAULT_MODEL, AVAILABLE_MODELS } from "@/lib/models";
 import {
@@ -50,6 +50,8 @@ export function ChatInterface({ onBack }: ChatInterfaceProps) {
   const [selectedModel, setSelectedModel] = useState(DEFAULT_MODEL);
   const [showModelPicker, setShowModelPicker] = useState(false);
   const [isRestoring, setIsRestoring] = useState(true);
+  const [isModelLoading, setIsModelLoading] = useState(true);
+  const [modelLoadError, setModelLoadError] = useState<string | null>(null);
   const [modelDropdownStyle, setModelDropdownStyle] = useState<React.CSSProperties | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const modelButtonRef = useRef<HTMLDivElement>(null);
@@ -59,6 +61,22 @@ export function ChatInterface({ onBack }: ChatInterfaceProps) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages]);
+
+  useEffect(() => {
+    const loadModel = async () => {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 30000);
+        await preloadModel();
+        clearTimeout(timeout);
+        setIsModelLoading(false);
+      } catch {
+        setModelLoadError("AI model failed to load. Check your network and refresh.");
+        setIsModelLoading(false);
+      }
+    };
+    loadModel();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -381,9 +399,23 @@ Content: ${sc.chunk.text}`
                   Your files stay in your browser. Data persists across refreshes.
                 </p>
               </div>
+              {isModelLoading && !modelLoadError && (
+                <div className="flex items-center gap-3 rounded-xl bg-primary-100 px-4 py-3">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary-500 border-t-transparent" />
+                  <div>
+                    <p className="text-sm font-medium text-primary-700">Loading AI engine...</p>
+                    <p className="text-xs text-primary-600/70">Downloading embedding model for the first time (~23MB). This happens once.</p>
+                  </div>
+                </div>
+              )}
+              {modelLoadError && (
+                <div className="rounded-xl bg-[#f5e6e4] border border-[#e5c8c4] px-4 py-3 text-sm text-[#c4817a]">
+                  {modelLoadError}
+                </div>
+              )}
               <DocumentUpload
                 onUpload={handleUpload}
-                isProcessing={isProcessing}
+                isProcessing={isProcessing || isModelLoading}
                 uploadedFiles={documents.map((d) => d.name)}
               />
             </div>

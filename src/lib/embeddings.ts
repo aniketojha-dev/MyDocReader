@@ -1,4 +1,5 @@
 let embedder: ((text: string) => Promise<number[]>) | null = null;
+let modelLoadPromise: Promise<void> | null = null;
 
 async function getEmbedder(): Promise<(text: string) => Promise<number[]>> {
   if (embedder) return embedder;
@@ -15,6 +16,13 @@ async function getEmbedder(): Promise<(text: string) => Promise<number[]>> {
   };
 
   return embedder;
+}
+
+export async function preloadModel(): Promise<void> {
+  if (embedder) return;
+  if (modelLoadPromise) return modelLoadPromise;
+  modelLoadPromise = getEmbedder().then(() => {});
+  return modelLoadPromise;
 }
 
 export async function generateEmbedding(text: string): Promise<number[]> {
