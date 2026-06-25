@@ -58,7 +58,7 @@ Retrieval-Augmented Generation (RAG) pipeline running entirely in the browser:
 
 ---
 
-Live Link Here : https://my-doc-reader-beige.vercel.app/
+Live Link Here : https://my-doc-reader-seven.vercel.app/
 
 ---
 
