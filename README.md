@@ -1,6 +1,7 @@
 # MyDocReader
 
 Upload PDF, DOCX, or TXT files and ask questions about your content. Answers are grounded in your documents with automatic citations.
+Live Link Here : https://my-doc-reader-seven.vercel.app
 
 ---
 
@@ -55,10 +56,6 @@ Retrieval-Augmented Generation (RAG) pipeline running entirely in the browser:
 | **Document Parsing** | pdf.js (PDF), mammoth.js (DOCX), File API (TXT) |
 | **Storage** | IndexedDB (browser) |
 | **Chunking** | Custom semantic chunker with metadata extraction |
-
----
-
-Live Link Here : https://my-doc-reader-seven.vercel.app/
 
 ---
 
